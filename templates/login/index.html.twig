@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}
+	<h1>Se connecter</h1>
+{% endblock %}
+{% block header_img %}{% endblock %}
+
+{% block body %}
+	{% if error %}
+		<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+	{% endif %}
+
+	<form action="{{ path('login') }}" method="post">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+		{# <input type="hidden" name="_target_path" value="/account"/> #}
+		<div class="row">
+			<div class="col-sm-6">
+				<label for="username">Email</label>
+				<input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Saisissez votre adresse email" class="form-control" required>
+
+			</div>
+			<div class="col-sm-6">
+				<label for="password">Password</label>
+				<input type="password" id="password" name="_password" placeholder="Saisissez votre mot de passe" class="form-control" required>
+			</div>
+		</div>
+
+
+		<button type="submit" class="btn btn-purple mt-4">Se connecter</button>
+	</form>
+{% endblock %}

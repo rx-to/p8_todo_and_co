@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}
+	<h1>Modifier un utilisateur</h1>
+{% endblock %}
+{% block header_img %}{% endblock %}
+
+{% block body %}
+
+	{{ form_start(registrationForm) }}
+	{% if form_errors(registrationForm) %}
+		<div class="alert alert-danger">
+			{{ form_errors(registrationForm) }}
+		</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-sm-6">
+			{{ form_label(registrationForm.username, "Nom d'utilisateur") }}
+			{{ form_widget(registrationForm.username, {'attr': {'class': 'form-control', 'placeholder': "Saisissez votre nom d'utilisateur"}}) }}
+		</div>
+		<div class="col-sm-6">
+			{{ form_label(registrationForm.email, "Email") }}
+			{{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': "Saisissez votre adresse email"}}) }}
+		</div>
+		<div class="col-sm-6 mt-3">
+			{{ form_label(registrationForm.password.first, "Mot de passe") }}
+			{{ form_widget(registrationForm.password.first, {'attr': {'class': 'form-control', 'placeholder': "Saisissez votre nouveau mot de passe"}}) }}
+		</div>
+		<div class="col-sm-6 mt-3">
+			{{ form_label(registrationForm.password.second, "Confirmation du mot de passe") }}
+			{{ form_widget(registrationForm.password.second, {'attr': {'class': 'form-control', 'placeholder': "Confirmez votre nouveau mot de passe"}}) }}
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-success mt-4">Créer</button>
+	{{ form_end(registrationForm) }}
+{% endblock %}
