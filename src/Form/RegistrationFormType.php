@@ -30,9 +30,9 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Length([
                         'min'        => 3,
-                        'minMessage' => 'Votre pseudo doit contenir au minimum 3 caractères.',
+                        'minMessage' => 'Le pseudo doit contenir au minimum 3 caractères.',
                         'max'        => 50,
-                        'maxMessage' => 'Votre adresse email ne peut pas excéder 50 caractères.'
+                        'maxMessage' => "Le pseudo ne peut pas excéder 50 caractères."
                     ])
                 ]
             ])
@@ -44,38 +44,12 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Length([
                         'min'        => 5,
-                        'minMessage' => 'Votre adresse eemail est trop courte.',
+                        'minMessage' => "L'adresse email est trop courte.",
                         'max'        => 255,
-                        'maxMessage' => 'Votre adresse email ne peut pas excéder 255 caractères.'
+                        'maxMessage' => "L'adresse email ne peut pas excéder 255 caractères."
                     ]),
                 ]
             ])
-
-            // ->add('agreeTerms', CheckboxType::class, [
-            //     'mapped' => false,
-            //     'constraints' => [
-            //         new IsTrue([
-            //             'message' => 'You should agree to our terms.',
-            //         ]),
-            //     ],
-            // ])
-            // ->add('plainPassword', PasswordType::class, [
-            //     // instead of being set onto the object directly,
-            //     // this is read and encoded in the controller
-            //     'mapped' => false,
-            //     'attr' => ['autocomplete' => 'new-password'],
-            //     'constraints' => [
-            //         new NotBlank([
-            //             'message' => 'Please enter a password',
-            //         ]),
-            //         new Length([
-            //             'min' => 6,
-            //             'minMessage' => 'Your password should be at least {{ limit }} characters',
-            //             // max length allowed by Symfony for security reasons
-            //             'max' => 4096,
-            //         ]),
-            //     ],
-            // ])
             ->add('password', RepeatedType::class, [
                 'error_bubbling' => true,
                 'type' => PasswordType::class,
@@ -96,7 +70,7 @@ class RegistrationFormType extends AbstractType
                     ],
                 ],
                 'second_options' => ['label' => 'Repeat Password'],
-            ]);;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

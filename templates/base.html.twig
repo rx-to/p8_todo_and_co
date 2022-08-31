@@ -65,13 +65,20 @@
 											<i class="fas fa-plus me-2"></i>Créer une tâche</a>
 									</li>
 									<li>
-										<a class="dropdown-item" href="{# path('completed_task_list') #}">
-											<i class="fas fa-check me-2"></i>Liste des tâches terminées</a>
+										<a class="dropdown-item" href="{{ path('task_list') }}">
+											<i class="fas fa-list me-2"></i>Toutes les tâches
+										</a>
+									</li>
+									{# <li>
+										<a class="dropdown-item" href="{{ path('completed_task_list') }}">
+											<i class="fas fa-check me-2"></i>Liste des tâches terminées
+										</a>
 									</li>
 									<li>
-										<a class="dropdown-item" href="{# path('to_do_task_list') #}">
-											<i class="fas fa-hourglass-half me-2"></i>Liste des tâches à faire</a>
-									</li>
+										<a class="dropdown-item" href="{{ path('to_do_task_list') }}">
+											<i class="fas fa-hourglass-half me-2"></i>Liste des tâches à faire
+										</a>
+									</li> #}
 								</ul>
 							</li>
 							{% if is_granted('ROLE_ADMIN') %}
@@ -142,5 +149,7 @@
 				Copyright &copy; OpenClassrooms
 			</footer>
 		</div>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="{{ asset('js/script.js') }}"></script>
 	</body>
 </html>

@@ -74,32 +74,29 @@ class UserController extends AbstractController
         throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
 
-    /**
-     * @Route("/users/{id}/edit", name="user_edit")
-     */
     #[Route('/users/{id}/edit', name: 'user_edit'), IsGranted("ROLE_ADMIN")]
     public function editAction(int $id, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository)
     {
-        $user = $userRepository->find($id);
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $formUser = $userRepository->find($id);
+        $form = $this->createForm(RegistrationFormType::class, $formUser);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
+            $formUser->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $user,
+                    $formUser,
                     $form->get('password')->getData()
                 )
             );
 
-            $entityManager->persist($user);
+            $entityManager->persist($formUser);
             $entityManager->flush();
 
-            $this->addFlash('success', "L'utilisateur <strong>" . $user->getUsername() . '</strong> a bien été modifié');
+            $this->addFlash('success', "L'utilisateur <strong>" . $formUser->getUsername() . '</strong> a bien été modifié');
 
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->render('user/edit.html.twig', ['registrationForm' => $form->createView(), 'user' => $user]);
+        return $this->render('user/edit.html.twig', ['registrationForm' => $form->createView(), 'user' => $formUser]);
     }
 }

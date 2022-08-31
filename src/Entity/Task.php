@@ -23,8 +23,11 @@ class Task
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => 0])]
     private ?bool $isDone = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -73,7 +76,7 @@ class Task
         return $this;
     }
 
-    public function isIsDone(): ?bool
+    public function isDone(): ?bool
     {
         return $this->isDone;
     }
@@ -83,5 +86,22 @@ class Task
         $this->isDone = $isDone;
 
         return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function toggle($flag)
+    {
+        $this->isDone = $flag;
     }
 }

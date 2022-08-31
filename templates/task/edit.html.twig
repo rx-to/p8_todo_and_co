@@ -1,11 +1,11 @@
-{% extends 'base.html.twig' %}
-
-{% block body %}
-    <div class="row">
-        {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
-            {{ form_widget(form) }}
-
-            <button type="submit" class="btn btn-success pull-right">Modifier</button>
-        {{ form_end(form) }}
-    </div>
+{% extends 'task/form.html.twig' %}
+{% block meta_title %}Éditer une tâche
+{% endblock %}
+{% block h1 %}Éditer une tâche
+{% endblock %}
+{% block extraFields %}
+	<div class="form-check form-switch mt-3">
+		{{ form_widget(taskForm.isDone, {'attr': {'class': 'form-check-input', 'role': 'switch'}}) }}
+		{{ form_label(taskForm.isDone, "Tâche finie", {'attr': {'class': 'form-check-label'}}) }}
+	</div>
 {% endblock %}
