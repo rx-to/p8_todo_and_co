@@ -86,11 +86,13 @@ label {
 .form-control:focus,
 .form-select:focus {
 	border-color: #a085ff;
+	background-color: #212122;
 	box-shadow: none;
 }
 .form-select {
-	border: solid 2px #7451eb;
+	border: solid 1px #7451eb;
 	border-radius: 0;
+	background-color: #2c2c2e;
 }
 .form-switch .form-check-input:checked {
     background-color: #7451eb;

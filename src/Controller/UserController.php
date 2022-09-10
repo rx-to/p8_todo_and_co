@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserFormType;
 use App\Form\RegistrationFormType;
+use App\Form\UserPasswordFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +43,7 @@ class UserController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-            
+
             $this->addFlash('success', "L'utilisateur <strong>" . $user->getUsername() . '</strong> a bien été créé.');
 
             return $this->redirectToRoute('user_list');
@@ -77,26 +79,40 @@ class UserController extends AbstractController
     #[Route('/users/{id}/edit', name: 'user_edit'), IsGranted("ROLE_ADMIN")]
     public function editAction(int $id, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository)
     {
-        $formUser = $userRepository->find($id);
-        $form = $this->createForm(RegistrationFormType::class, $formUser);
-        $form->handleRequest($request);
+        $curUser = $userRepository->find($id);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $formUser->setPassword(
+        $userPasswordForm = $this->createForm(UserPasswordFormType::class, $curUser);
+        $userPasswordForm->handleRequest($request);
+
+        $userForm = $this->createForm(UserFormType::class, $curUser);
+        $userForm->handleRequest($request);
+
+        $formSuccess = false;
+
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $entityManager->persist($curUser);
+            $entityManager->flush();
+            $formSuccess = true;
+        }
+
+        if ($userPasswordForm->isSubmitted() && $userPasswordForm->isValid()) {
+            $curUser->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $formUser,
-                    $form->get('password')->getData()
+                    $curUser,
+                    $userPasswordForm->get('password')->getData()
                 )
             );
 
-            $entityManager->persist($formUser);
+            $entityManager->persist($curUser);
             $entityManager->flush();
+            $formSuccess = true;
+        }
 
-            $this->addFlash('success', "L'utilisateur <strong>" . $formUser->getUsername() . '</strong> a bien été modifié');
-
+        if ($formSuccess) {
+            $this->addFlash('success', "L'utilisateur <strong>" . $curUser->getUsername() . '</strong> a bien été modifié');
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->render('user/edit.html.twig', ['registrationForm' => $form->createView(), 'user' => $formUser]);
+        return $this->render('user/edit.html.twig', ['editUserForm' => $userForm->createView(), 'editUserPasswordForm' => $userPasswordForm->createView(), 'user' => $curUser]);
     }
 }

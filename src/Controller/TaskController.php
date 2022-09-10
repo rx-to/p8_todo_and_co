@@ -50,7 +50,7 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $task->setUser($this->getUser());
-            $task->isIsDone(0);
+            $task->isDone(0);
             $entityManager->persist($task);
             $entityManager->flush();
 
@@ -65,17 +65,12 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/edit', name: 'task_edit'), IsGranted("ROLE_USER")]
     public function editAction(Task $task, Request $request, EntityManagerInterface $entityManager)
     {
-        $condition1 = $task->getUser() == $this->getUser();
-        $condition2 = $this->isGranted('ROLE_ADMIN') && !$task->getUser();
-
-        if (!$condition1 && !$condition2) throw $this->createAccessDeniedException();
-
+        $this->checkAuthorizations($task);
         $form = $this->createForm(TaskType::class, $task);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $task->isIsDone(0);
+            $task->isDone(0);
             $entityManager->persist($task);
             $entityManager->flush();
 
@@ -93,6 +88,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/toggle', name: 'task_toggle'), IsGranted("ROLE_USER")]
     public function toggleTaskAction(Task $task, EntityManagerInterface $entityManager)
     {
+        $this->checkAuthorizations($task);
         $task->toggle(!$task->isDone());
         $entityManager->flush();
 
@@ -104,11 +100,19 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete'), IsGranted("ROLE_USER")]
     public function deleteTaskAction(Task $task, EntityManagerInterface $entityManager)
     {
+        $this->checkAuthorizations($task);
         $entityManager->remove($task);
         $entityManager->flush();
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
+    }
+
+    private function checkAuthorizations(Task $task) {
+        $condition1 = $task->getUser() == $this->getUser();
+        $condition2 = $this->isGranted('ROLE_ADMIN') && !$task->getUser();
+
+        if (!$condition1 && !$condition2) throw $this->createAccessDeniedException();
     }
 }
