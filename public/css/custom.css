@@ -20,16 +20,21 @@ body {
 	text-transform: uppercase;
 	transform: scaleY(1.4);
 }
-
-span {
-}
 .navbar-toggler:hover {
 	text-decoration: none;
+}
+.dropdown-item.active,
+.dropdown-item:active {
+	background-color: #a085ff;
+}
+.btn-purple,
+.btn-purple:hover,
+.btn-transparent {
+	color: #fff;
 }
 .btn-transparent {
 	border: solid 2px;
 	background-color: transparent;
-	color: #fff;
 }
 .btn-transparent:hover {
 	border-color: #fff;
@@ -39,12 +44,22 @@ span {
 .btn-purple {
 	background-color: #7451eb;
 	border: solid 2px #7451eb;
-	color: #fff;
 }
 .btn-purple:hover {
 	background-color: #6544d1;
 	border-color: #6544d1;
-	color: #fff;
+}
+.btn-yellow,
+.btn-yellow:hover {
+	color: #000;
+}
+.btn-yellow {
+	background-color: #ffae36;
+	border: solid 2px #ffae36;
+}
+.btn-yellow:hover {
+	background-color: #e99b27;
+	border-color: #e99b27;
 }
 main {
 	padding-top: 2.5rem;
@@ -59,6 +74,10 @@ main {
 .alert-success {
 	background-color: #2dff394d;
 	border-color: #2dff394d;
+}
+.alert-warning {
+	background-color: #eaff2d4d;
+	border-color: #eaff2d4d;
 }
 .alert ul {
 	margin-bottom: 0;
@@ -95,12 +114,12 @@ label {
 	background-color: #2c2c2e;
 }
 .form-switch .form-check-input:checked {
-    background-color: #7451eb;
-    border-color: #7451eb;
+	background-color: #7451eb;
+	border-color: #7451eb;
 }
 .form-switch .form-check-input:focus {
 	border: 0;
-    box-shadow: none;
+	box-shadow: none;
 	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23d0c2ff'/%3e%3c/svg%3e");
 }
 .btn {
@@ -111,6 +130,6 @@ h1 {
 	margin-bottom: 1.5rem;
 }
 .cards-container {
-	margin-top: -.5rem;
-	margin-bottom: -.5rem;
+	margin-top: -0.5rem;
+	margin-bottom: -0.5rem;
 }

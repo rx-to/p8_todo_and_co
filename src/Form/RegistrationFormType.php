@@ -3,10 +3,13 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Form\UserFormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class RegistrationFormType extends UserFormType
 {
@@ -35,7 +38,8 @@ class RegistrationFormType extends UserFormType
                     ],
                 ],
                 'second_options' => ['label' => 'Confirmation du mot de passe'],
-            ]);
+            ])
+            ->remove('roles');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block header_img %}{% endblock %}
-
+{% block meta_title %}Liste des utilisateurs{% endblock %}
 {% block header_title %}
 	<h1>Liste des utilisateurs</h1>
 {% endblock %}
@@ -31,7 +31,7 @@
 								<td>{{ user.username }}</td>
 								<td>{{ user.email }}</td>
 								<td>
-									<a href="{{ path('user_edit', {'id' : user.id}) }}" class="btn btn-purple btn-sm"><i class="fas fa-user-pen me-2"></i>Éditer</a>
+									<a href="{{ path('user_edit', {'user' : user.id}) }}" class="btn btn-purple btn-sm"><i class="fas fa-user-pen me-2"></i>Éditer</a>
 								</td>
 							</tr>
 						{% endfor %}

@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Form\TaskType;
+use App\Form\TaskFormType;
+use App\Form\EditTaskFormType;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +45,7 @@ class TaskController extends AbstractController
     public function createAction(Request $request, EntityManagerInterface $entityManager)
     {
         $task = new Task();
-        $form = $this->createForm(TaskType::class, $task);
+        $form = $this->createForm(TaskFormType::class, $task);
 
         $form->handleRequest($request);
 
@@ -66,7 +67,7 @@ class TaskController extends AbstractController
     public function editAction(Task $task, Request $request, EntityManagerInterface $entityManager)
     {
         $this->checkAuthorizations($task);
-        $form = $this->createForm(TaskType::class, $task);
+        $form = $this->createForm(EditTaskFormType::class, $task);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -92,7 +93,7 @@ class TaskController extends AbstractController
         $task->toggle(!$task->isDone());
         $entityManager->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        $this->addFlash('success', sprintf('Le statut de la tâche %s a bien été mis à jour.', $task->getTitle()));
 
         return $this->redirectToRoute('task_list');
     }
@@ -109,7 +110,8 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
-    private function checkAuthorizations(Task $task) {
+    private function checkAuthorizations(Task $task)
+    {
         $condition1 = $task->getUser() == $this->getUser();
         $condition2 = $this->isGranted('ROLE_ADMIN') && !$task->getUser();
 

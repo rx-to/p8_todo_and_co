@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -76,43 +77,42 @@ class UserController extends AbstractController
         throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
 
-    #[Route('/users/{id}/edit', name: 'user_edit'), IsGranted("ROLE_ADMIN")]
-    public function editAction(int $id, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository)
+    #[Route('/users/{user}/edit', name: 'user_edit'), IsGranted("ROLE_ADMIN")]
+    public function editAction(User $user, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher)
     {
-        $curUser = $userRepository->find($id);
+        $userPasswordForm = $this->createForm(UserPasswordFormType::class, $user)->handleRequest($request);
+        $userForm = $this->createForm(UserFormType::class, $user)->handleRequest($request);
 
-        $userPasswordForm = $this->createForm(UserPasswordFormType::class, $curUser);
-        $userPasswordForm->handleRequest($request);
+        $formIsSubmittedAndValid = false;
 
-        $userForm = $this->createForm(UserFormType::class, $curUser);
-        $userForm->handleRequest($request);
-
-        $formSuccess = false;
-
-        if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $entityManager->persist($curUser);
-            $entityManager->flush();
-            $formSuccess = true;
+        // Form #1 • User info.
+        if ($this->getUser() != $user && $userForm->isSubmitted() && $userForm->isValid()) {
+            $formIsSubmittedAndValid = true;
+            $flash = "Les informations de l'utilisateur <strong>" . $user->getUsername() . '</strong> ont bien été mises à jour.';
         }
 
+        // Form #2 • User password.
         if ($userPasswordForm->isSubmitted() && $userPasswordForm->isValid()) {
-            $curUser->setPassword(
+            $user->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $curUser,
+                    $user,
                     $userPasswordForm->get('password')->getData()
                 )
             );
 
-            $entityManager->persist($curUser);
-            $entityManager->flush();
-            $formSuccess = true;
+            $formIsSubmittedAndValid = true;
+            $flash = "Le mot de passe de l'utilisateur <strong>" . $user->getUsername() . '</strong> a bien été modifié.';
         }
 
-        if ($formSuccess) {
-            $this->addFlash('success', "L'utilisateur <strong>" . $curUser->getUsername() . '</strong> a bien été modifié');
+        if($formIsSubmittedAndValid) {
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', $flash);
+
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->render('user/edit.html.twig', ['editUserForm' => $userForm->createView(), 'editUserPasswordForm' => $userPasswordForm->createView(), 'user' => $curUser]);
+        return $this->render('user/edit.html.twig', ['editUserForm' => $userForm->createView(), 'editUserPasswordForm' => $userPasswordForm->createView(), 'user' => $user]);
     }
 }
