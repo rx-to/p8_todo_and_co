@@ -13,6 +13,12 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class UserPasswordFormType extends AbstractType
 {
+    /**
+     * I want to validate the password field with a regex pattern
+     * 
+     * @param FormBuilderInterface builder The form builder object.
+     * @param array options 
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -39,6 +45,11 @@ class UserPasswordFormType extends AbstractType
             ]);
     }
 
+    /**
+     * The configureOptions() method is used to set the default data class for the form.
+     * 
+     * @param OptionsResolver resolver The OptionsResolver object.
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

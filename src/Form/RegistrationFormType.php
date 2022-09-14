@@ -13,6 +13,12 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class RegistrationFormType extends UserFormType
 {
+    /**
+     * It adds a password field to the form, and removes the roles field
+     * 
+     * @param FormBuilderInterface builder The form builder
+     * @param array options 
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -42,6 +48,11 @@ class RegistrationFormType extends UserFormType
             ->remove('roles');
     }
 
+    /**
+     * It tells Symfony that the form is going to be used to create or edit a User object
+     * 
+     * @param OptionsResolver resolver The OptionsResolver object.
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

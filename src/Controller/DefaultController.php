@@ -8,6 +8,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
 
+   /**
+    * The function indexAction() is a public function that returns the render of the
+    * default/index.html.twig file.
+    * 
+    * @return The render method is returning the contents of the file default/index.html.twig.
+    */
     #[Route('/', name: 'homepage')]
     public function indexAction()
     {

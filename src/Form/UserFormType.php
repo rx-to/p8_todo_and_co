@@ -15,6 +15,15 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserFormType extends AbstractType
 {
+    /**
+     * The `buildForm()` function is used to create the form. It takes two parameters: the
+     * `FormBuilderInterface` and an array of options
+     * 
+     * @param FormBuilderInterface builder The form builder object.
+     * @param array options An array of options for the form type.
+     * 
+     * @return void The form is being returned.
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -67,6 +76,11 @@ class UserFormType extends AbstractType
             ));
     }
 
+    /**
+     * The configureOptions() method is used to set the default data class for the form.
+     * 
+     * @param OptionsResolver resolver The OptionsResolver object.
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
