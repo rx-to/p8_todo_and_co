@@ -23,9 +23,19 @@ body {
 .navbar-toggler:hover {
 	text-decoration: none;
 }
+.navbar ul>li.active>a {
+	color: #ffae36;
+}
+.navbar ul>li>ul>li.active .dropdown-item, .navbar ul>li>ul>li.active .dropdown-item:hover {
+	background-color: #ffae36;
+}
+.navbar ul>li>ul>li.active a {
+	color: #000;
+}
 .dropdown-item.active,
 .dropdown-item:active {
-	background-color: #a085ff;
+	background-color: #ffae36;
+	color: #000;
 }
 .btn-purple,
 .btn-purple:hover,

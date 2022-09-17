@@ -22,7 +22,7 @@ class TaskController extends AbstractController
      * 
      * @return The render method is a shortcut that combines the following two steps:
      */
-    #[Route('/tasks', name: 'task_list')]
+    #[Route('/tasks', name: 'task_list'), IsGranted("ROLE_USER")]
     public function listTasks(TaskRepository $taskRepository)
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findAll()]);
@@ -35,7 +35,7 @@ class TaskController extends AbstractController
      * 
      * @return The render method is returning a Response object.
      */
-    #[Route('/completed-tasks', name: 'completed_task_list')]
+    #[Route('/completed-tasks', name: 'completed_task_list'), IsGranted("ROLE_USER")]
     public function listCompletedTasks(TaskRepository $taskRepository)
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone' => 1])]);
@@ -48,7 +48,7 @@ class TaskController extends AbstractController
      * 
      * @return The render method returns a Response object.
      */
-    #[Route('/to-do-tasks', name: 'to_do_task_list')]
+    #[Route('/to-do-tasks', name: 'to_do_task_list'), IsGranted("ROLE_USER")]
     public function listToDoTasks(TaskRepository $taskRepository)
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone' => 0])]);
