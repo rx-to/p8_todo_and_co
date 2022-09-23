@@ -68,6 +68,8 @@ Voici les commandes à utiliser :
 Vos modifications seront publiées sur **GitHub** dans la **branche « dev »** sans impacter la **branche principale**. 
 ## Effectuer un contrôle de qualité
 ### Avant le push : lancement des tests unitaires
+![](img/phpunit.png)
+
 Avant d’effectuer un **push**, il est nécessaire de vérifier que l’implémentation et/ou la modification d’une fonctionnalité n’a pas impacté le fonctionnement du reste de l’application avec le lancement des **tests unitaires**. De plus, il faut garder le taux de couverture supérieur à 70%.
 ### Après le push : analyse du code sur Code Climate
 ![](img/codeclimate.png)
