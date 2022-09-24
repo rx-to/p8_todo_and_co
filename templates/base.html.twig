@@ -55,15 +55,15 @@
 								{% endif %}
 							</li>
 							<li class="nav-item dropdown{% if app.request.get('_route') in ['task_edit', 'task_create', 'completed_task_list', 'to_do_task_list', 'task_list'] %} active{% endif %}">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<a class="nav-link dropdown-toggle" href="#" id="tasks-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 									<i class="fas fa-list-check me-2"></i>Tâches
 								</a>
-								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<li{% if app.request.get('_route') in ['task_create'] %} class="active"{% endif %}>
+								<ul class="dropdown-menu" aria-labelledby="tasks-dropdown">
+									<li {% if app.request.get('_route') in ['task_create'] %} class="active" {% endif %}>
 										<a class="dropdown-item" href="{{ path('task_create') }}">
 											<i class="fas fa-plus me-2"></i>Créer une tâche</a>
 									</li>
-									<li{% if app.request.get('_route') in ['completed_task_list', 'to_do_task_list', 'task_list'] %} class="active"{% endif %}>
+									<li {% if app.request.get('_route') in ['completed_task_list', 'to_do_task_list', 'task_list'] %} class="active" {% endif %}>
 										<a class="dropdown-item" href="{{ path('task_list') }}">
 											<i class="fas fa-list me-2"></i>Toutes les tâches
 										</a>
@@ -72,15 +72,15 @@
 							</li>
 							{% if is_granted('ROLE_ADMIN') %}
 								<li class="nav-item dropdown{% if app.request.get('_route') in ['user_create', 'user_edit', 'user_list'] %} active{% endif %}">
-									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									<a class="nav-link dropdown-toggle" href="#" id="users-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 										<i class="fas fa-users me-2"></i>Utilisateurs
 									</a>
-									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<li{% if app.request.get('_route') in ['user_create'] %} class="active"{% endif %}>
+									<ul class="dropdown-menu" aria-labelledby="users-dropdown">
+										<li {% if app.request.get('_route') in ['user_create'] %} class="active" {% endif %}>
 											<a class="dropdown-item" href="{{ path('user_create') }}">
 												<i class="fas fa-plus me-2"></i>Créer un utilisateur</a>
 										</li>
-										<li{% if app.request.get('_route') in ['user_list'] %} class="active"{% endif %}>
+										<li {% if app.request.get('_route') in ['user_list'] %} class="active" {% endif %}>
 											<a class="dropdown-item" href="{{ path('user_list') }}">
 												<i class="fas fa-list me-2"></i>Liste des utilisateurs</a>
 										</li>

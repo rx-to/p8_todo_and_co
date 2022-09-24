@@ -10,10 +10,13 @@
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
+        "paragonie/sodium_compat": "^1.18",
         "sensio/framework-extra-bundle": "^6.2",
-        "symfony/apache-pack": "^1.0",
         "symfony/asset": "6.1.*",
+        "symfony/browser-kit": "6.1.*",
         "symfony/console": "6.1.*",
+        "symfony/css-selector": "6.1.*",
+        "symfony/doctrine-bridge": "6.1.*",
         "symfony/dotenv": "6.1.*",
         "symfony/flex": "^2",
         "symfony/form": "6.1.*",
@@ -29,8 +32,13 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^7.1",
         "phpunit/phpunit": "^9.5",
-        "symfony/maker-bundle": "^1.44"
+        "symfony/apache-pack": "^1.0",
+        "symfony/maker-bundle": "^1.46",
+        "symfony/phpunit-bridge": "^6.1",
+        "symfony/stopwatch": "6.1.*",
+        "symfony/web-profiler-bundle": "6.1.*"
     },
     "config": {
         "allow-plugins": {
