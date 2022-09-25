@@ -38,7 +38,7 @@
 				{{ form_widget(editUserForm.roles, {'attr': {'class': 'form-select text-light'}}) }}
 			</div>
 		</div>
-		<button type="submit" class="btn btn-purple mt-4">
+		<button type="submit" id="submit-btn" class="btn btn-purple mt-4">
 			<i class="fas fa-check me-2"></i>Valider</button>
 		{{ form_end(editUserForm) }}
 		<hr>
@@ -59,7 +59,7 @@
 			{{ form_widget(editUserPasswordForm.password.second, {'attr': {'class': 'form-control', 'placeholder': "Confirmez votre nouveau mot de passe"}}) }}
 		</div>
 	</div>
-	<button type="submit" class="btn btn-purple mt-4">
+	<button type="submit" id="submit-btn-2" class="btn btn-purple mt-4">
 		<i class="fas fa-check me-2"></i>Valider</button>
 	{{ form_end(editUserPasswordForm) }}
 {% endblock %}

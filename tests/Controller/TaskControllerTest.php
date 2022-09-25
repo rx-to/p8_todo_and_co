@@ -5,7 +5,6 @@ namespace App\Tests\Controller;
 use App\DataFixtures\UserFixtures;
 use App\DataFixtures\TaskFixtures;
 use App\Repository\UserRepository;
-use App\Repository\TaskRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
@@ -17,6 +16,7 @@ class TaskControllerTest extends WebTestCase
     protected $databaseTool;
 
     private $client;
+    private const USER_EMAIL = 'utilisateur@todo-and-co.com';
 
     /**
      * This function creates a client that can be used to make requests to the application.
@@ -51,18 +51,17 @@ class TaskControllerTest extends WebTestCase
         $user = $userRepository->findOneByEmail($email);
         $this->client->loginUser($user);
     }
-
+  
     /**
-     * "This function logs in a user, then requests a page, and asserts that the response is
-     * successful."
+     * This function logs in a user with the email  and then visits the route  and
+     * asserts that the response is successful.
      * 
-     * This function is used in the following way:
-     * 
-     * @param route The route to the page you want to access.
+     * @param userEmail The email address of the user you want to log in as.
+     * @param route The route to the page you want to test.
      */
-    private function accessPageWhileLoggedIn($route)
+    private function accessPageWhileLoggedIn($userEmail, $route)
     {
-        $this->login();
+        $this->login($userEmail);
         $this->client->request('GET', $route);
         $this->assertResponseIsSuccessful();
     }
@@ -70,7 +69,7 @@ class TaskControllerTest extends WebTestCase
     /* Testing the route `/tasks` */
     public function testListTasks()
     {
-        $this->accessPageWhileLoggedIn('/tasks');
+        $this->accessPageWhileLoggedIn(self::USER_EMAIL, '/tasks');
     }
 
     /**
@@ -78,7 +77,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testListCompletedTasks()
     {
-        $this->accessPageWhileLoggedIn('/completed-tasks');
+        $this->accessPageWhileLoggedIn(self::USER_EMAIL, '/completed-tasks');
     }
 
     /**
@@ -86,7 +85,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testListToDoTasks()
     {
-        $this->accessPageWhileLoggedIn('/to-do-tasks');
+        $this->accessPageWhileLoggedIn(self::USER_EMAIL, '/to-do-tasks');
     }
 
     /**
@@ -94,7 +93,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testDisplayCreateAction()
     {
-        $this->accessPageWhileLoggedIn('/tasks/create');
+        $this->accessPageWhileLoggedIn(self::USER_EMAIL, '/tasks/create');
     }
 
     /**
@@ -120,7 +119,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testDisplayEditAction()
     {
-        $this->accessPageWhileLoggedIn('/tasks/1/edit');
+        $this->accessPageWhileLoggedIn(self::USER_EMAIL, '/tasks/1/edit');
     }
 
     /**
