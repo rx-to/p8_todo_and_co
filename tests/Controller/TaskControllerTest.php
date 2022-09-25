@@ -2,14 +2,20 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Task;
-use App\Entity\User;
+use App\DataFixtures\UserFixtures;
+use App\DataFixtures\TaskFixtures;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Repository\TaskRepository;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class TaskControllerTest extends WebTestCase
 {
+    /** @var AbstractDatabaseTool */
+    protected $databaseTool;
+
     private $client;
 
     /**
@@ -17,23 +23,32 @@ class TaskControllerTest extends WebTestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
         $this->client = static::createClient();
+        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
+        $this->databaseTool->loadFixtures([UserFixtures::class, TaskFixtures::class]);
     }
 
-   /**
-    * The `tearDown()` function is called after each test is run. It is used to clean up the
-    * environment after each test
-    */
+    /**
+     * The `tearDown()` function is called after each test is run. It is used to clean up the
+     * environment after each test
+     */
     public function tearDown(): void
     {
-        $this->client = null;
+        self::ensureKernelShutdown();
+        parent::tearDown();
+        unset($this->databaseTool);
     }
 
-    /* A function that is used to log in a user. */
-    private function login()
+    /**
+     * It logs in a user
+     * 
+     * @param email The email address of the user you want to log in.
+     */
+    private function login($email = 'utilisateur@todo-and-co.com')
     {
         $userRepository = static::getContainer()->get(UserRepository::class);
-        $user = $userRepository->findOneByEmail('utilisateur@todo-and-co.com');
+        $user = $userRepository->findOneByEmail($email);
         $this->client->loginUser($user);
     }
 
@@ -48,8 +63,7 @@ class TaskControllerTest extends WebTestCase
     private function accessPageWhileLoggedIn($route)
     {
         $this->login();
-        $crawler = $this->client->request('GET', $route);
-
+        $this->client->request('GET', $route);
         $this->assertResponseIsSuccessful();
     }
 
@@ -67,9 +81,9 @@ class TaskControllerTest extends WebTestCase
         $this->accessPageWhileLoggedIn('/completed-tasks');
     }
 
-   /**
+    /**
      * This function tests that the user can access the to do tasks page while logged in.
-    */
+     */
     public function testListToDoTasks()
     {
         $this->accessPageWhileLoggedIn('/to-do-tasks');
@@ -106,7 +120,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testDisplayEditAction()
     {
-        $this->accessPageWhileLoggedIn('/tasks/555/edit');
+        $this->accessPageWhileLoggedIn('/tasks/1/edit');
     }
 
     /**
@@ -115,7 +129,7 @@ class TaskControllerTest extends WebTestCase
     public function testEditActionWhileNotBeingAuthorized()
     {
         $this->login();
-        $crawler = $this->client->request('GET', '/tasks/666/edit');
+        $this->client->request('GET', '/tasks/2/edit');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
@@ -126,7 +140,7 @@ class TaskControllerTest extends WebTestCase
     public function testEditActionWhileBeingAuthorized()
     {
         $this->login();
-        $crawler = $this->client->request('GET', '/tasks/555/edit');
+        $crawler = $this->client->request('GET', '/tasks/1/edit');
         $buttonCrawlerNode = $crawler->selectButton('submit-btn');
 
         $form = $buttonCrawlerNode->form([
@@ -145,7 +159,7 @@ class TaskControllerTest extends WebTestCase
     public function testToggleTaskActionWhileNotBeingAuthorized()
     {
         $this->login();
-        $crawler = $this->client->request('GET', '/tasks/666/toggle');
+        $this->client->request('GET', '/tasks/2/toggle');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -155,7 +169,7 @@ class TaskControllerTest extends WebTestCase
     public function testToggleTaskActionWhileBeingAuthorized()
     {
         $this->login();
-        $crawler = $this->client->request('GET', '/tasks/555/toggle');
+        $this->client->request('GET', '/tasks/1/toggle');
         $this->assertResponseRedirects('/tasks');
     }
 
@@ -166,7 +180,7 @@ class TaskControllerTest extends WebTestCase
     public function testDeleteTaskActionWhileNotBeingAuthorized()
     {
         $this->login();
-        $crawler = $this->client->request('GET', '/tasks/555/delete');
+        $this->client->request('GET', '/tasks/2/delete');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -176,23 +190,7 @@ class TaskControllerTest extends WebTestCase
     public function testDeleteTaskActionWhileBeingAuthorized()
     {
         $this->login();
-        $crawler = $this->client->request('GET', '/tasks/555/delete');
+        $this->client->request('GET', '/tasks/1/delete');
         $this->assertResponseRedirects('/tasks');
-    }
-
-    /* A function that is used to test that the user is authorized to manage a task. */
-    private function testCheckAuthorizationsIsOk()
-    {
-        $taskRepository = static::getContainer()->get(TaskRepository::class);
-        $task = $taskRepository->find(666);
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-    }
-
-    /* A function that is used to test that the user is not authorized to manage a task. */
-    private function testCheckAuthorizationsIsNotOk()
-    {
-        $taskRepository = static::getContainer()->get(TaskRepository::class);
-        $task = $taskRepository->find(666);
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }
